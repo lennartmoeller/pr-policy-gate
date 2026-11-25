@@ -1,5 +1,5 @@
 name: Pull Request Policy Gate
-description: Gate pull requests with one commit status that waits for the approvals and checks the matched rules require.
+description: Enforces configurable, change-aware approval and check requirements before pull requests can merge.
 branding:
   icon: shield
   color: blue
