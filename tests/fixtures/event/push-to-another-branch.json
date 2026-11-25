@@ -1,0 +1,10 @@
+{
+  "event": "push",
+  "payload": {
+    "ref": "refs/heads/feature",
+    "before": "b",
+    "after": "a"
+  },
+  "api": {},
+  "expected": null
+}

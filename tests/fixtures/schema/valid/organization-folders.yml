@@ -1,0 +1,29 @@
+rules:
+  - name: Organization owners
+    when:
+      paths: ["organizations/{*}/**"]
+    required_approvals:
+      reviewers:
+        - team: "acme-{*}/acme-{*}-owner"
+  - name: Platform-sensitive organization changes
+    when:
+      paths: ["organizations/{*}/**"]
+      script: .github/pr-policy-gate/platform-approval.sh
+    required_approvals:
+      reviewers:
+        - team: ent:acme-platform-owner
+  - name: Platform-sensitive enterprise config
+    when:
+      paths: [enterprise/config.yml]
+      script: .github/pr-policy-gate/platform-approval.sh
+    required_approvals:
+      reviewers:
+        - team: ent:acme-platform-owner
+  - name: Platform-owned files
+    when:
+      paths: ["**", "!organizations/*/**", "!enterprise/config.yml"]
+    required_approvals:
+      reviewers:
+        - team: acme-owner
+  - name: Checks
+    required_status_checks: [Configuration validation, Quality, Lint, Analyze]

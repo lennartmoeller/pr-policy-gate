@@ -1,0 +1,5 @@
+rules:
+  - name: S
+    when:
+      script: scripts/x.sh
+    required_status_checks: [Lint]

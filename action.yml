@@ -1,0 +1,29 @@
+name: PR Policy Gate
+description: Gate pull requests with one commit status that waits for the approvals and checks the matched rules require.
+
+inputs:
+  client-id:
+    description: The gate App's client ID.
+    required: true
+  app-private-key:
+    description: The gate App's private key, as PEM or base64-encoded PEM.
+    required: true
+  team-members:
+    description: 'The members of the Teams the rules name, as JSON like `[{"team": "my-org/my-team", "logins": ["alice"]}]`. Leave empty to read them as the gate App.'
+    default: ""
+  config-path:
+    description: The path of the configuration file, which the action reads from the default branch.
+    default: .github/pr-policy-gate.yml
+
+runs:
+  using: composite
+  steps:
+    - name: Evaluate the gate
+      shell: bash
+      env:
+        PYTHONPATH: ${{ github.action_path }}/src
+        INPUT_CLIENT_ID: ${{ inputs.client-id }}
+        INPUT_APP_PRIVATE_KEY: ${{ inputs.app-private-key }}
+        INPUT_TEAM_MEMBERS: ${{ inputs.team-members }}
+        INPUT_CONFIG_PATH: ${{ inputs.config-path }}
+      run: python3 -m pr_policy_gate

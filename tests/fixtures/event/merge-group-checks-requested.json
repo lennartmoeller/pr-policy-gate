@@ -1,0 +1,17 @@
+{
+  "event": "merge_group",
+  "payload": {
+    "action": "checks_requested",
+    "merge_group": {
+      "head_sha": "grp",
+      "base_sha": "base"
+    }
+  },
+  "api": {},
+  "expected": {
+    "merge_group": {
+      "sha": "grp",
+      "base_sha": "base"
+    }
+  }
+}

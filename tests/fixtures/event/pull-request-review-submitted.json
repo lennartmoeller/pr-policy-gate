@@ -1,0 +1,24 @@
+{
+  "event": "pull_request_review",
+  "payload": {
+    "action": "submitted",
+    "pull_request": {
+      "number": 7,
+      "head": {
+        "repo": {
+          "full_name": "owner/repo"
+        }
+      },
+      "base": {
+        "ref": "main"
+      }
+    }
+  },
+  "api": {},
+  "expected": {
+    "pull_requests": [
+      7
+    ],
+    "forks_are_errors": false
+  }
+}

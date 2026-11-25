@@ -1,0 +1,17 @@
+{
+  "event": "pull_request_review",
+  "payload": {
+    "action": "dismissed",
+    "pull_request": {
+      "number": 7,
+      "head": {
+        "repo": null
+      },
+      "base": {
+        "ref": "main"
+      }
+    }
+  },
+  "api": {},
+  "expected": null
+}

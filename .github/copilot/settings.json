@@ -1,0 +1,13 @@
+{
+  "extraKnownMarketplaces": {
+    "lennartmoeller": {
+      "source": {
+        "source": "github",
+        "repo": "lennartmoeller/agentic-plugins"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "agentic@lennartmoeller": true
+  }
+}

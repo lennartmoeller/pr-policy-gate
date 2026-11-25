@@ -1,0 +1,49 @@
+{
+  "event": "workflow_run",
+  "payload": {
+    "action": "completed",
+    "workflow_run": {
+      "head_sha": "abc",
+      "head_branch": "feature"
+    }
+  },
+  "api": {
+    "/repos/owner/repo/commits/abc/pulls?per_page=100": [
+      {
+        "number": 5,
+        "state": "open",
+        "head": {
+          "sha": "abc"
+        }
+      },
+      {
+        "number": 3,
+        "state": "open",
+        "head": {
+          "sha": "abc"
+        }
+      },
+      {
+        "number": 2,
+        "state": "closed",
+        "head": {
+          "sha": "abc"
+        }
+      },
+      {
+        "number": 1,
+        "state": "open",
+        "head": {
+          "sha": "older"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "pull_requests": [
+      3,
+      5
+    ],
+    "forks_are_errors": false
+  }
+}

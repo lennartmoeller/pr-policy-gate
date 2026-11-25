@@ -1,0 +1,33 @@
+{
+  "event": "push",
+  "payload": {
+    "ref": "refs/heads/main",
+    "before": "b",
+    "after": "a"
+  },
+  "api": {
+    "/repos/owner/repo/pulls?state=open&base=main&per_page=100": [
+      {
+        "number": 9,
+        "state": "open",
+        "head": {
+          "sha": "s9"
+        }
+      },
+      {
+        "number": 4,
+        "state": "open",
+        "head": {
+          "sha": "s4"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "pull_requests": [
+      4,
+      9
+    ],
+    "forks_are_errors": false
+  }
+}

@@ -1,0 +1,7 @@
+rules:
+  - name: X
+    required_approvals:
+      minimum: 3
+      reviewers:
+        - user: alice_acme
+        - team: maintainers

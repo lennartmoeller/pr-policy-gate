@@ -1,0 +1,246 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/lennartmoeller/github-pr-policy-gate/blob/main/schema/pr-policy-gate.schema.json",
+  "title": "PR Policy Gate configuration",
+  "description": "The contract for the configuration file, `.github/pr-policy-gate.yml` unless the input `config-path` names another path, which PR Policy Gate reads from the current head of the repository's default branch and never from a pull request. Every rule whose `when` matches a pull request applies, and the commit status `pr-policy-gate` turns `success` once the required approvals and required status checks of all matched rules are met; an invalid or missing file sets it to `error`.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["rules"],
+  "properties": {
+    "rules": {
+      "description": "The rules. All rules that match a pull request apply together, and a pull request that matches no rule needs nothing. A rule without `when` applies to every pull request and sets a baseline.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "description": "One rule with what it requires when it matches, through `required_approvals`, `required_status_checks`, or both. Several groups that must all approve are separate rules with the same `when`.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name"],
+        "anyOf": [
+          {
+            "required": ["required_approvals"]
+          },
+          {
+            "required": ["required_status_checks"]
+          }
+        ],
+        "if": {
+          "required": ["when"],
+          "properties": {
+            "when": {
+              "required": ["paths"],
+              "properties": {
+                "paths": {
+                  "contains": {
+                    "pattern": "\\{\\*\\}"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "else": {
+          "description": "Reviewer values contain `{*}` only when the rule's `when.paths` do.",
+          "properties": {
+            "required_approvals": {
+              "properties": {
+                "reviewers": {
+                  "items": {
+                    "additionalProperties": {
+                      "not": {
+                        "pattern": "\\{\\*\\}"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "properties": {
+          "name": {
+            "description": "The rule's name, which the action uses to point at the rule in its error messages. Names are unique within the file; the action rejects duplicates.",
+            "$ref": "#/$defs/non_empty_line",
+            "examples": ["Platform files"]
+          },
+          "when": {
+            "description": "The filters that decide whether the rule applies; omit `when` to apply the rule to every pull request. When both `paths` and `script` are given, both must hold.",
+            "type": "object",
+            "additionalProperties": false,
+            "minProperties": 1,
+            "properties": {
+              "paths": {
+                "description": "GitHub Actions `paths` filter patterns, matched against the whole path from the repository root. At least one pattern is positive. The filter holds when any changed path of the pull request matches the list, and a renamed file counts with its old and new path. The placeholder `{*}` captures one or more characters other than `/` and creates one rule instance per captured value, whose patterns, reviewer values, and script use that value; when one positive pattern contains `{*}`, every positive pattern does, and a rule without `{*}` has a single instance. Quote patterns, because YAML rejects an unquoted `{*}` inside `[...]` lists.",
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "$ref": "#/$defs/path_pattern"
+                },
+                "contains": {
+                  "not": {
+                    "pattern": "^!"
+                  }
+                },
+                "if": {
+                  "contains": {
+                    "pattern": "^(?!!).*\\{\\*\\}"
+                  }
+                },
+                "then": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "pattern": "^!"
+                      },
+                      {
+                        "pattern": "\\{\\*\\}"
+                      }
+                    ]
+                  }
+                },
+                "else": {
+                  "items": {
+                    "not": {
+                      "pattern": "\\{\\*\\}"
+                    }
+                  }
+                },
+                "examples": [
+                  [".github/**"],
+                  ["**", "!organizations/*/**", "!enterprise/config.yml"],
+                  ["services/{*}/**", "!services/{*}/docs/**"]
+                ]
+              },
+              "script": {
+                "description": "A script that decides by its exit code: 0 means the filter holds, 1 means it does not, anything else sets the status to `error`. It is read from the default branch's current head, must be executable there with a shebang, and runs with that commit's checkout as working directory. It receives `PR_POLICY_GATE_BASE_SHA` (that trusted commit), `PR_POLICY_GATE_HEAD_SHA`, `PR_POLICY_GATE_DIFF_BASE_DIR` (a read-only checkout of the merge base used for changed paths, or the merge group's base), `PR_POLICY_GATE_HEAD_DIR` (a read-only checkout of the evaluated head), `PR_POLICY_GATE_CHANGED_FILES` (a file listing one changed path per line, renames with old and new path), `PR_POLICY_GATE_MATCH` (the rule instance's `{*}` value, empty without `{*}`), and the environment of the action step without the App credentials.",
+                "$ref": "#/$defs/relative_file_path",
+                "examples": [".github/pr-policy-gate/platform-approval.sh"]
+              }
+            }
+          },
+          "required_approvals": {
+            "description": "The approvals the rule requires; omit it when the rule requires none. Each person's latest approval, request for changes, or dismissal decides, and comment-only reviews change nothing. An approval counts until GitHub dismisses it because the pull request's diff changed. The pull request author counts as one approval for every listed Team they belong to while they made the latest push to the head branch. A request for changes from a counted reviewer blocks the rule until they approve or the review is dismissed.",
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["reviewers"],
+            "properties": {
+              "minimum": {
+                "description": "How many distinct counted approvals the rule requires.",
+                "type": "integer",
+                "minimum": 1,
+                "default": 1,
+                "examples": [2]
+              },
+              "reviewers": {
+                "description": "The reviewers whose approvals count together toward `minimum`. One person's approval counts toward every rule they qualify for.",
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "$ref": "#/$defs/reviewer"
+                },
+                "examples": [
+                  [
+                    {
+                      "team": "ent:acme-platform-owner"
+                    },
+                    {
+                      "user": "alice"
+                    },
+                    {
+                      "app": "some-app"
+                    }
+                  ]
+                ]
+              }
+            }
+          },
+          "required_status_checks": {
+            "description": "Names of check runs and commit statuses that must pass while the rule matches, on the pull request head or, in the merge queue, on the merge-group commit. The latest result per name counts: `success`, `neutral`, and `skipped` pass, other completed results fail, and a missing or running check keeps the gate pending, also when it never reports. The workflows producing these checks keep their own path filters, and the consumer workflow lists them under `workflow_run` so the gate re-evaluates when they finish. `{*}` is not substituted in check names.",
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "$ref": "#/$defs/non_empty_line",
+              "not": {
+                "pattern": "\\{\\*\\}"
+              }
+            },
+            "examples": [
+              ["Lint", "Test"]
+            ]
+          }
+        }
+      },
+      "examples": [
+        [
+          {
+            "name": "Organization owners",
+            "when": {
+              "paths": ["organizations/{*}/**"]
+            },
+            "required_approvals": {
+              "reviewers": [
+                {
+                  "team": "acme-{*}/acme-{*}-owner"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Checks",
+            "required_status_checks": ["Configuration validation", "Quality", "Lint", "Analyze"]
+          }
+        ]
+      ]
+    }
+  },
+  "$defs": {
+    "non_empty_line": {
+      "description": "One line of text without leading or trailing whitespace.",
+      "type": "string",
+      "pattern": "^[^\\x00-\\x20\\x7f]([^\\x00-\\x1f\\x7f]*[^\\x00-\\x20\\x7f])?$"
+    },
+    "path_pattern": {
+      "description": "One GitHub Actions `paths` pattern: `*` matches anything except `/`, `**` matches anything, `?` and `+` make the preceding character optional or repeatable, `[]` matches one listed character, and a leading `!` excludes paths that earlier patterns matched. `{*}` appears at most once per pattern.",
+      "type": "string",
+      "pattern": "^(?!!?/)(?!!?$)[^\\x00-\\x1f\\x7f]+$",
+      "not": {
+        "pattern": "\\{\\*\\}.*\\{\\*\\}"
+      }
+    },
+    "relative_file_path": {
+      "description": "A file path relative to the repository root, with no leading or trailing slash, no empty segment, and no `.` or `..` segment.",
+      "type": "string",
+      "pattern": "^(?!\\.{1,2}(?:/|$))[^/\\x00-\\x1f\\x7f]+(?:/(?!\\.{1,2}(?:/|$))[^/\\x00-\\x1f\\x7f]+)*$"
+    },
+    "reviewer": {
+      "description": "One reviewer, given by exactly one of `team`, `user`, or `app`.",
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "maxProperties": 1,
+      "properties": {
+        "team": {
+          "description": "A Team whose members' approvals count, including members of its child Teams: `<slug>` for a Team of the repository's Organization, `<org>/<slug>` for a Team of another Organization the App is installed in, or `ent:<slug>` for an Enterprise Team assigned to the repository's Organization. A Team the App cannot read sets the status to `error`.",
+          "type": "string",
+          "pattern": "^(?:ent:|(?:[A-Za-z0-9-]|\\{\\*\\})+/)?(?:[A-Za-z0-9._-]|\\{\\*\\})+$",
+          "examples": ["maintainers", "acme-{*}/acme-{*}-owner", "ent:acme-platform-owner"]
+        },
+        "user": {
+          "description": "A user login, compared case-insensitively.",
+          "type": "string",
+          "pattern": "^(?:[A-Za-z0-9_-]|\\{\\*\\})+$",
+          "examples": ["alice_acme"]
+        },
+        "app": {
+          "description": "A GitHub App slug; the App's reviews come from `<slug>[bot]`.",
+          "type": "string",
+          "pattern": "^(?:[a-z0-9-]|\\{\\*\\})+$",
+          "examples": ["some-app"]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,611 @@
+{
+  "missing rules": {},
+  "empty rules": {
+    "rules": []
+  },
+  "unknown top key": {
+    "rules": [
+      {
+        "name": "R",
+        "required_status_checks": [
+          "L"
+        ]
+      }
+    ],
+    "defaults": {}
+  },
+  "rule without name": {
+    "rules": [
+      {
+        "required_status_checks": [
+          "L"
+        ]
+      }
+    ]
+  },
+  "empty name": {
+    "rules": [
+      {
+        "name": "",
+        "required_status_checks": [
+          "L"
+        ]
+      }
+    ]
+  },
+  "blank name": {
+    "rules": [
+      {
+        "name": " x",
+        "required_status_checks": [
+          "L"
+        ]
+      }
+    ]
+  },
+  "no requirements": {
+    "rules": [
+      {
+        "name": "R",
+        "when": {
+          "paths": [
+            "a/**"
+          ]
+        }
+      }
+    ]
+  },
+  "reason key": {
+    "rules": [
+      {
+        "name": "R",
+        "reason": "x",
+        "required_status_checks": [
+          "L"
+        ]
+      }
+    ]
+  },
+  "old approvals key": {
+    "rules": [
+      {
+        "name": "R",
+        "approvals": {
+          "reviewers": [
+            {
+              "team": "t"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "old status_checks key": {
+    "rules": [
+      {
+        "name": "R",
+        "status_checks": [
+          "L"
+        ]
+      }
+    ]
+  },
+  "old for_each key": {
+    "rules": [
+      {
+        "name": "R",
+        "for_each": {
+          "org": "o/{org}/**"
+        },
+        "required_status_checks": [
+          "L"
+        ]
+      }
+    ]
+  },
+  "when empty": {
+    "rules": [
+      {
+        "name": "R",
+        "when": {},
+        "required_status_checks": [
+          "L"
+        ]
+      }
+    ]
+  },
+  "when combinator and": {
+    "rules": [
+      {
+        "name": "R",
+        "when": {
+          "and": [
+            {
+              "paths": [
+                "a"
+              ]
+            }
+          ]
+        },
+        "required_status_checks": [
+          "L"
+        ]
+      }
+    ]
+  },
+  "paths empty": {
+    "rules": [
+      {
+        "name": "R",
+        "when": {
+          "paths": []
+        },
+        "required_status_checks": [
+          "L"
+        ]
+      }
+    ]
+  },
+  "paths only negative": {
+    "rules": [
+      {
+        "name": "R",
+        "when": {
+          "paths": [
+            "!docs/**"
+          ]
+        },
+        "required_status_checks": [
+          "L"
+        ]
+      }
+    ]
+  },
+  "paths duplicate": {
+    "rules": [
+      {
+        "name": "R",
+        "when": {
+          "paths": [
+            "a",
+            "a"
+          ]
+        },
+        "required_status_checks": [
+          "L"
+        ]
+      }
+    ]
+  },
+  "{*} twice in pattern": {
+    "rules": [
+      {
+        "name": "R",
+        "when": {
+          "paths": [
+            "a/{*}/{*}"
+          ]
+        },
+        "required_status_checks": [
+          "L"
+        ]
+      }
+    ]
+  },
+  "{*} mixed positives": {
+    "rules": [
+      {
+        "name": "R",
+        "when": {
+          "paths": [
+            "a/{*}/**",
+            "b/**"
+          ]
+        },
+        "required_status_checks": [
+          "L"
+        ]
+      }
+    ]
+  },
+  "{*} only in negative": {
+    "rules": [
+      {
+        "name": "R",
+        "when": {
+          "paths": [
+            "**",
+            "!a/{*}/**"
+          ]
+        },
+        "required_status_checks": [
+          "L"
+        ]
+      }
+    ]
+  },
+  "pattern leading slash": {
+    "rules": [
+      {
+        "name": "R",
+        "when": {
+          "paths": [
+            "/a/**"
+          ]
+        },
+        "required_status_checks": [
+          "L"
+        ]
+      }
+    ]
+  },
+  "pattern negated leading slash": {
+    "rules": [
+      {
+        "name": "R",
+        "when": {
+          "paths": [
+            "**",
+            "!/a"
+          ]
+        },
+        "required_status_checks": [
+          "L"
+        ]
+      }
+    ]
+  },
+  "pattern lone !": {
+    "rules": [
+      {
+        "name": "R",
+        "when": {
+          "paths": [
+            "**",
+            "!"
+          ]
+        },
+        "required_status_checks": [
+          "L"
+        ]
+      }
+    ]
+  },
+  "reviewer {*} without {*} paths": {
+    "rules": [
+      {
+        "name": "R",
+        "when": {
+          "paths": [
+            "a/**"
+          ]
+        },
+        "required_approvals": {
+          "reviewers": [
+            {
+              "team": "x-{*}"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "reviewer {*} without when": {
+    "rules": [
+      {
+        "name": "R",
+        "required_approvals": {
+          "reviewers": [
+            {
+              "user": "{*}"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "reviewer two keys": {
+    "rules": [
+      {
+        "name": "R",
+        "required_approvals": {
+          "reviewers": [
+            {
+              "team": "a",
+              "user": "b"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "reviewer old type/name": {
+    "rules": [
+      {
+        "name": "R",
+        "required_approvals": {
+          "reviewers": [
+            {
+              "type": "Team",
+              "name": "a"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "reviewer empty": {
+    "rules": [
+      {
+        "name": "R",
+        "required_approvals": {
+          "reviewers": [
+            {}
+          ]
+        }
+      }
+    ]
+  },
+  "user [bot]": {
+    "rules": [
+      {
+        "name": "R",
+        "required_approvals": {
+          "reviewers": [
+            {
+              "user": "x[bot]"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "app uppercase": {
+    "rules": [
+      {
+        "name": "R",
+        "required_approvals": {
+          "reviewers": [
+            {
+              "app": "Some-App"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "app [bot]": {
+    "rules": [
+      {
+        "name": "R",
+        "required_approvals": {
+          "reviewers": [
+            {
+              "app": "x[bot]"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "team space": {
+    "rules": [
+      {
+        "name": "R",
+        "required_approvals": {
+          "reviewers": [
+            {
+              "team": "a b"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "team two slashes": {
+    "rules": [
+      {
+        "name": "R",
+        "required_approvals": {
+          "reviewers": [
+            {
+              "team": "a/b/c"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "minimum 0": {
+    "rules": [
+      {
+        "name": "R",
+        "required_approvals": {
+          "minimum": 0,
+          "reviewers": [
+            {
+              "team": "t"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "minimum string": {
+    "rules": [
+      {
+        "name": "R",
+        "required_approvals": {
+          "minimum": "2",
+          "reviewers": [
+            {
+              "team": "t"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "approvals without reviewers": {
+    "rules": [
+      {
+        "name": "R",
+        "required_approvals": {
+          "minimum": 1
+        }
+      }
+    ]
+  },
+  "reviewers empty": {
+    "rules": [
+      {
+        "name": "R",
+        "required_approvals": {
+          "reviewers": []
+        }
+      }
+    ]
+  },
+  "reviewers duplicate": {
+    "rules": [
+      {
+        "name": "R",
+        "required_approvals": {
+          "reviewers": [
+            {
+              "team": "t"
+            },
+            {
+              "team": "t"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "approvals unknown key": {
+    "rules": [
+      {
+        "name": "R",
+        "required_approvals": {
+          "reviewers": [
+            {
+              "team": "t"
+            }
+          ],
+          "count": 1
+        }
+      }
+    ]
+  },
+  "checks empty": {
+    "rules": [
+      {
+        "name": "R",
+        "required_status_checks": []
+      }
+    ]
+  },
+  "checks duplicate": {
+    "rules": [
+      {
+        "name": "R",
+        "required_status_checks": [
+          "L",
+          "L"
+        ]
+      }
+    ]
+  },
+  "checks with {*}": {
+    "rules": [
+      {
+        "name": "R",
+        "when": {
+          "paths": [
+            "a/{*}"
+          ]
+        },
+        "required_status_checks": [
+          "Validate {*}"
+        ]
+      }
+    ]
+  },
+  "script absolute": {
+    "rules": [
+      {
+        "name": "R",
+        "when": {
+          "script": "/x.sh"
+        },
+        "required_status_checks": [
+          "L"
+        ]
+      }
+    ]
+  },
+  "script dotdot": {
+    "rules": [
+      {
+        "name": "R",
+        "when": {
+          "script": "../x.sh"
+        },
+        "required_status_checks": [
+          "L"
+        ]
+      }
+    ]
+  },
+  "script inner dotdot": {
+    "rules": [
+      {
+        "name": "R",
+        "when": {
+          "script": "a/../b.sh"
+        },
+        "required_status_checks": [
+          "L"
+        ]
+      }
+    ]
+  },
+  "script trailing slash": {
+    "rules": [
+      {
+        "name": "R",
+        "when": {
+          "script": "a/"
+        },
+        "required_status_checks": [
+          "L"
+        ]
+      }
+    ]
+  },
+  "script dot segment": {
+    "rules": [
+      {
+        "name": "R",
+        "when": {
+          "script": "./x.sh"
+        },
+        "required_status_checks": [
+          "L"
+        ]
+      }
+    ]
+  },
+  "when not a mapping": {
+    "rules": [
+      {
+        "name": "R",
+        "when": "x",
+        "required_status_checks": [
+          "L"
+        ]
+      }
+    ]
+  }
+}

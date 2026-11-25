@@ -1,0 +1,73 @@
+# $schema: https://raw.githubusercontent.com/lennartmoeller/pr-policy-gate/main/schema/pr-policy-gate.schema.json
+
+# The rules.
+# All rules that match a pull request apply together, and a pull request that matches no rule needs nothing.
+# A rule without when applies to every pull request and sets a baseline.
+# At least 1 entry.
+rules:
+
+  # The rule's name, which the action uses to point at the rule in its error messages.
+  # Names are unique within the file; the action rejects duplicates.
+- name: Platform files
+
+  # Optional.
+  # The filters that decide whether the rule applies; omit when to apply the rule to every pull request.
+  # When both paths and script are given, both must hold.
+  # At least 1 field.
+  when:
+
+    # Optional.
+    # GitHub Actions paths filter patterns, matched against the whole path from the repository root.
+    # At least one pattern is positive.
+    # The filter holds when any changed path of the pull request matches the list, and a renamed file counts with its old and new path.
+    # The placeholder {*} captures one or more characters other than / and creates one rule instance per captured value, whose patterns, reviewer values, and script use that value; when one positive pattern contains {*}, every positive pattern does, and a rule without {*} has a single instance.
+    # Quote patterns, because YAML rejects an unquoted {*} inside [...] lists.
+    # At least 1 entry.
+    paths: [.github/**]
+
+    # Optional.
+    # A script that decides by its exit code: 0 means the filter holds, 1 means it does not, anything else sets the status to error.
+    # It is read from the default branch's current head, must be executable there with a shebang, and runs with that commit's checkout as working directory.
+    # It receives PR_POLICY_GATE_BASE_SHA (that trusted commit), PR_POLICY_GATE_HEAD_SHA, PR_POLICY_GATE_DIFF_BASE_DIR (a read-only checkout of the merge base used for changed paths, or the merge group's base), PR_POLICY_GATE_HEAD_DIR (a read-only checkout of the evaluated head), PR_POLICY_GATE_CHANGED_FILES (a file listing one changed path per line, renames with old and new path), PR_POLICY_GATE_MATCH (the rule instance's {*} value, empty without {*}), and the environment of the action step without the App credentials.
+    script: .github/pr-policy-gate/platform-approval.sh
+
+  # Optional.
+  # The approvals the rule requires; omit it when the rule requires none.
+  # Each person's latest approval, request for changes, or dismissal decides, and comment-only reviews change nothing.
+  # An approval counts until GitHub dismisses it because the pull request's diff changed.
+  # The pull request author counts as one approval for every listed Team they belong to while they made the latest push to the head branch.
+  # A request for changes from a counted reviewer blocks the rule until they approve or the review is dismissed.
+  required_approvals:
+
+    # Optional.
+    # How many distinct counted approvals the rule requires.
+    # Defaults to 1.
+    minimum: 2
+
+    # The reviewers whose approvals count together toward minimum.
+    # One person's approval counts toward every rule they qualify for.
+    # At least 1 entry, at least 1 field.
+    reviewers:
+
+      # Optional.
+      # A Team whose members' approvals count, including members of its child Teams: <slug> for a Team of the repository's Organization, <org>/<slug> for a Team of another Organization the App is installed in, or ent:<slug> for an Enterprise Team assigned to the repository's Organization.
+      # A Team the App cannot read sets the status to error.
+      # Matching ^(?:ent:|(?:[A-Za-z0-9-]|\{\*\})+/)?(?:[A-Za-z0-9._-]|\{\*\})+$.
+    - team: maintainers
+
+      # Optional.
+      # A user login, compared case-insensitively.
+      # Matching ^(?:[A-Za-z0-9_-]|\{\*\})+$.
+    - user: alice_acme
+
+      # Optional.
+      # A GitHub App slug; the App's reviews come from <slug>[bot].
+      # Matching ^(?:[a-z0-9-]|\{\*\})+$.
+    - app: some-app
+
+  # Optional.
+  # Names of check runs and commit statuses that must pass while the rule matches, on the pull request head or, in the merge queue, on the merge-group commit.
+  # The latest result per name counts: success, neutral, and skipped pass, other completed results fail, and a missing or running check keeps the gate pending, also when it never reports.
+  # The workflows producing these checks keep their own path filters, and the consumer workflow lists them under workflow_run so the gate re-evaluates when they finish. {*} is not substituted in check names.
+  # At least 1 entry.
+  required_status_checks: [Lint, Test]

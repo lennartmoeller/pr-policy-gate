@@ -1,0 +1,27 @@
+{
+  "event": "check_run",
+  "payload": {
+    "action": "completed",
+    "check_run": {
+      "head_sha": "grp",
+      "check_suite": {
+        "head_branch": "gh-readonly-queue/main/pr-7-base"
+      }
+    }
+  },
+  "api": {
+    "/repos/owner/repo/commits/grp": {
+      "parents": [
+        {
+          "sha": "base"
+        }
+      ]
+    }
+  },
+  "expected": {
+    "merge_group": {
+      "sha": "grp",
+      "base_sha": "base"
+    }
+  }
+}

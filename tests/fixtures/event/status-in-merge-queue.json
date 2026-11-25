@@ -1,0 +1,27 @@
+{
+  "event": "status",
+  "payload": {
+    "sha": "grp",
+    "context": "Lint",
+    "branches": [
+      {
+        "name": "gh-readonly-queue/main/pr-7-base"
+      }
+    ]
+  },
+  "api": {
+    "/repos/owner/repo/commits/grp": {
+      "parents": [
+        {
+          "sha": "base"
+        }
+      ]
+    }
+  },
+  "expected": {
+    "merge_group": {
+      "sha": "grp",
+      "base_sha": "base"
+    }
+  }
+}

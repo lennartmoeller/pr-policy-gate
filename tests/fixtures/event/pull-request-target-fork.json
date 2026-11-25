@@ -1,0 +1,24 @@
+{
+  "event": "pull_request_target",
+  "payload": {
+    "action": "synchronize",
+    "pull_request": {
+      "number": 7,
+      "head": {
+        "repo": {
+          "full_name": "fork/repo"
+        }
+      },
+      "base": {
+        "ref": "main"
+      }
+    }
+  },
+  "api": {},
+  "expected": {
+    "pull_requests": [
+      7
+    ],
+    "forks_are_errors": true
+  }
+}

@@ -1,0 +1,42 @@
+name: Release
+
+on:
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  version:
+    name: Version
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ssh-key: ${{ secrets.RELEASE_DEPLOY_KEY }}
+          fetch-depth: 0
+
+      - name: Set up mise
+        uses: jdx/mise-action@924e7c586e33d7d4bae9c14e26c5d22e2beb6e78 # v5.3.0
+
+      - name: Write example configuration with its schema reference
+        env:
+          SCHEMA_FILE: schema/pr-policy-gate.schema.json
+        run: |
+          set -euo pipefail
+          {
+            echo "# \$schema: https://raw.githubusercontent.com/$GITHUB_REPOSITORY/main/$SCHEMA_FILE"
+            echo
+            python3 scripts/render_example.py "$SCHEMA_FILE"
+          } >example/configuration.yml
+
+      - name: Release next version
+        uses: lennartmoeller/release-from-conventional-commits@7764ed22b8fe067d3583b44121e206bd691a534e # v0.1.2
+        with:
+          write_version: uv version "$VERSION" --no-sync

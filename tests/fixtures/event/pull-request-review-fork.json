@@ -1,0 +1,19 @@
+{
+  "event": "pull_request_review",
+  "payload": {
+    "action": "submitted",
+    "pull_request": {
+      "number": 7,
+      "head": {
+        "repo": {
+          "full_name": "fork/repo"
+        }
+      },
+      "base": {
+        "ref": "main"
+      }
+    }
+  },
+  "api": {},
+  "expected": null
+}

@@ -1,0 +1,16 @@
+{
+  "event": "check_run",
+  "payload": {
+    "action": "completed",
+    "check_run": {
+      "head_sha": "abc",
+      "check_suite": {
+        "head_branch": "feature"
+      }
+    }
+  },
+  "api": {
+    "/repos/owner/repo/commits/abc/pulls?per_page=100": []
+  },
+  "expected": null
+}

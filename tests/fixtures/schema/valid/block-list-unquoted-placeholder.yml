@@ -1,0 +1,8 @@
+rules:
+  - name: X
+    when:
+      paths:
+        - services/{*}/**
+    required_approvals:
+      reviewers:
+        - team: other-org/{*}-owners

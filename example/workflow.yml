@@ -1,0 +1,35 @@
+name: PR Policy Gate
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, edited]
+  pull_request_review:
+    types: [submitted, dismissed]
+  workflow_run:
+    workflows: [CI]  # TODO: list all workflows that produce required status checks
+    types: [completed]
+  check_run:
+    types: [completed]
+  status:
+  merge_group:
+    types: [checks_requested]
+  push:
+    branches: [main]  # TODO: name the default branch
+
+permissions: {}
+
+concurrency:
+  group: pr-policy-gate-${{ github.event.pull_request.number || github.event.workflow_run.pull_requests[0].number || github.event.check_run.pull_requests[0].number || github.event.workflow_run.head_sha || github.event.check_run.head_sha || github.event.sha || github.sha }}
+
+jobs:
+  gate:
+    if: >-
+      (github.event_name != 'status' || github.event.context != 'pr-policy-gate')
+      && (github.event.action != 'edited' || github.event.changes.base)
+    runs-on: ubuntu-latest  # TODO: the runner you want to use
+    steps:
+      - uses: lennartmoeller/pr-policy-gate@<full commit SHA of a release>  # TODO: pin a release, such as v0.1.0
+        with:
+          client-id: ${{ vars.PR_POLICY_GATE_APP_CLIENT_ID }}
+          app-private-key: ${{ secrets.PR_POLICY_GATE_APP_PRIVATE_KEY }}
+          config-path: .github/pr-policy-gate.yml  # OPTIONAL: only if the configuration lives elsewhere

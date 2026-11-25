@@ -1,0 +1,8 @@
+rules:
+  - name: X
+    when:
+      paths: ["teams/{*}.yml"]
+    required_approvals:
+      reviewers:
+        - user: "{*}"
+        - app: "bot-{*}"
