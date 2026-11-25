@@ -1,6 +1,6 @@
 <!-- pr-policy-gate -->
 
-## PR Policy Gate
+## Pull Request Policy Gate
 
 ### Required approvals
 - ✅ 2/2 `ent:acme-platform-owner`/`alice`/`some-app[bot]` approved

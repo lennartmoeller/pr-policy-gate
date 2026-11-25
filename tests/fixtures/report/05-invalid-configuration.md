@@ -1,6 +1,6 @@
 <!-- pr-policy-gate -->
 
-## PR Policy Gate
+## Pull Request Policy Gate
 
 ### ⚠️ Invalid `.github/pr-policy-gate.yml` on `main`
 - `rules[2]` (`Platform files`) `required_approvals.minimum`: `0` is less than 1. How many distinct counted approvals the rule requires.

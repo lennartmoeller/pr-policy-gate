@@ -183,7 +183,7 @@ def test_the_summary_adds_a_title_and_the_approvals_that_count_for_no_matched_ru
     ]
 
     assert evaluated("#12", [result("Security", **SECURITY)], uncounted, at("13:05")).summary == (
-        "## PR Policy Gate · #12\n\n"
+        "## Pull Request Policy Gate · #12\n\n"
         "### Required approvals\n- ✅ 1/1 `security` approved\n\n"
         "### Approvals that count for no matched rule\n"
         "- `eve`: not a reviewer of any matched rule\n- `frank`: dismissed\n\n"
@@ -198,7 +198,7 @@ def test_merge_group_results_show_checks_only():
 
     assert (report.state, report.description) == ("pending", "Waiting for 1 check")
     assert report.summary == (
-        "## PR Policy Gate · merge group `abc1234`\n\n### Required checks\n- ⏳ `Lint` running\n\n"
+        "## Pull Request Policy Gate · merge group `abc1234`\n\n### Required checks\n- ⏳ `Lint` running\n\n"
         "<sub>Last evaluated 2026-10-15 08:00 UTC</sub>\n"
     )
 
@@ -220,7 +220,7 @@ def test_a_merge_group_whose_rules_require_no_checks_says_so():
 
     assert (report.state, report.description) == ("success", "All requirements met")
     assert report.summary == (
-        "## PR Policy Gate · merge group `abc1234`\n\nNo required checks.\n\n"
+        "## Pull Request Policy Gate · merge group `abc1234`\n\nNo required checks.\n\n"
         "<sub>Last evaluated 2026-10-15 08:00 UTC</sub>\n"
     )
 

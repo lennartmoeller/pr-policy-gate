@@ -123,10 +123,10 @@ def test_a_pull_request_meeting_its_rules_gets_success_a_comment_and_a_summary(e
     assert statuses(transport) == [(source["head"], "success", "All requirements met")]
     ((_, comment),) = [sent for sent in transport.sent("POST") if sent[0].endswith("/comments")]
     assert comment["body"].startswith(
-        "<!-- pr-policy-gate -->\n\n## PR Policy Gate\n\n"
+        "<!-- pr-policy-gate -->\n\n## Pull Request Policy Gate\n\n"
         "### Required approvals\n- ✅ 1/1 `maintainers` approved\n\n### Required checks\n- ✅ `Lint` passed\n\n"
     )
-    assert summary.read_text().startswith("## PR Policy Gate · #7\n\n### Required approvals\n")
+    assert summary.read_text().startswith("## Pull Request Policy Gate · #7\n\n### Required approvals\n")
     assert list((summary.parent / "runner").iterdir()) == []
 
 
@@ -281,7 +281,7 @@ def test_a_merge_group_gets_a_status_and_a_summary_but_no_comment(environment, s
     assert statuses(transport) == [(head, "success", "All requirements met")]
     assert not [sent for sent in transport.sent("POST") if sent[0].endswith("/comments")]
     assert summary.read_text().startswith(
-        f"## PR Policy Gate · merge group `{head[:7]}`\n\n### Required checks\n- ✅ `Lint` passed\n"
+        f"## Pull Request Policy Gate · merge group `{head[:7]}`\n\n### Required checks\n- ✅ `Lint` passed\n"
     )
 
 

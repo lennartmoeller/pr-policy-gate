@@ -1,5 +1,8 @@
-name: PR Policy Gate
+name: Pull Request Policy Gate
 description: Gate pull requests with one commit status that waits for the approvals and checks the matched rules require.
+branding:
+  icon: shield
+  color: blue
 
 inputs:
   client-id:

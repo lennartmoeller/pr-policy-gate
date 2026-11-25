@@ -1,4 +1,4 @@
-# PR Policy Gate
+# Pull Request Policy Gate
 
 A GitHub Action that makes sure a pull request has the right approvals and passing checks before it can be merged.
 
@@ -8,12 +8,12 @@ GitHub covers simple cases natively via rulesets.
 The rule [`pull_request`](https://docs.github.com/en/enterprise-cloud@latest/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets#require-a-pull-request-before-merging) can require a number of approvals, and two of its settings can tie approvals to the changed files: [`require_code_owner_review`](https://docs.github.com/en/enterprise-cloud@latest/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets#require-a-pull-request-before-merging) for the owners that [CODEOWNERS](https://docs.github.com/en/enterprise-cloud@latest/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners) lists, and [`required_reviewers`](https://docs.github.com/en/enterprise-cloud@latest/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets#required-reviewers) for Teams per file pattern.
 The rule [`required_status_checks`](https://docs.github.com/en/enterprise-cloud@latest/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets#require-status-checks-to-pass-before-merging) can require passing status checks.
 
-But in Enterprise use cases, these rulesets often fall short of the complex approval and check requirements, which is where PR Policy Gate comes in:
+But in Enterprise use cases, these rulesets often fall short of the complex approval and check requirements, which is where Pull Request Policy Gate comes in:
 
 <table>
   <tr>
     <th width="50%" align="left">:octocat: GitHub Rulesets</th>
-    <th width="50%" align="left">:bulb: PR Policy Gate</th>
+    <th width="50%" align="left">:bulb: Pull Request Policy Gate</th>
   </tr>
   <tr>
     <td>Required checks cannot depend on the changed paths.</td>

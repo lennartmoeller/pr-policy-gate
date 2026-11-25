@@ -1,4 +1,4 @@
-name: PR Policy Gate
+name: Pull Request Policy Gate
 
 on:
   pull_request_target:

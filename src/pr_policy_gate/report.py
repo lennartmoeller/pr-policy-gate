@@ -7,7 +7,7 @@ from pr_policy_gate.checks import CheckState
 from pr_policy_gate.conditions import Instance
 from pr_policy_gate.config import Reviewer
 
-TITLE = "PR Policy Gate"
+TITLE = "Pull Request Policy Gate"
 MARKER = "<!-- pr-policy-gate -->"
 DESCRIPTION_LIMIT = 140
 CHECK_LINES = {

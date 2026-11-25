@@ -91,6 +91,6 @@ def test_append_summary_adds_to_the_step_summary(tmp_path, monkeypatch):
     summary_file.write_text("before\n")
     monkeypatch.setenv("GITHUB_STEP_SUMMARY", str(summary_file))
 
-    append_summary("## PR Policy Gate · #7\n")
+    append_summary("## Pull Request Policy Gate · #7\n")
 
-    assert summary_file.read_text() == "before\n## PR Policy Gate · #7\n"
+    assert summary_file.read_text() == "before\n## Pull Request Policy Gate · #7\n"

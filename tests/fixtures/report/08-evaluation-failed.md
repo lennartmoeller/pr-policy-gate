@@ -1,6 +1,6 @@
 <!-- pr-policy-gate -->
 
-## PR Policy Gate
+## Pull Request Policy Gate
 
 ### ⚠️ Evaluation failed
 - Team `acme-gone/acme-gone-owner` is not readable: GET /orgs/acme-gone/installation failed with HTTP 404 Not Found.

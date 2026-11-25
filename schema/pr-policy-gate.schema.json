@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/lennartmoeller/github-pr-policy-gate/blob/main/schema/pr-policy-gate.schema.json",
-  "title": "PR Policy Gate configuration",
-  "description": "The contract for the configuration file, `.github/pr-policy-gate.yml` unless the input `config-path` names another path, which PR Policy Gate reads from the current head of the repository's default branch and never from a pull request. Every rule whose `when` matches a pull request applies, and the commit status `pr-policy-gate` turns `success` once the required approvals and required status checks of all matched rules are met; an invalid or missing file sets it to `error`.",
+  "title": "Pull Request Policy Gate configuration",
+  "description": "The contract for the configuration file, `.github/pr-policy-gate.yml` unless the input `config-path` names another path, which Pull Request Policy Gate reads from the current head of the repository's default branch and never from a pull request. Every rule whose `when` matches a pull request applies, and the commit status `pr-policy-gate` turns `success` once the required approvals and required status checks of all matched rules are met; an invalid or missing file sets it to `error`.",
   "type": "object",
   "additionalProperties": false,
   "required": ["rules"],

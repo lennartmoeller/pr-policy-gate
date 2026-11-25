@@ -1,6 +1,6 @@
 <!-- pr-policy-gate -->
 
-## PR Policy Gate
+## Pull Request Policy Gate
 
 ### ⚠️ Fork pull requests are not supported
 
